@@ -24,16 +24,16 @@ rule all:
 
 rule calculate_md5sum:
     input:
-        fastq=os.path.join(input_folder, "{file}")
+        fastq = os.path.join(input_folder, "{file}")
     output:
-        md5sum=os.path.join(md5sum_folder, "{file}.md5sum")
+        md5sum = os.path.join(md5sum_folder, "{file}.md5sum")
     shell:
         "mkdir -p $(dirname {output.md5sum}); "
         "md5sum {input.fastq} > {output.md5sum}"
 
 rule join_md5sums:
     input:
-        expand(os.path.join(md5sum_folder, "{file}.md5sum"), file=input_files)
+        expand(os.path.join(md5sum_folder, "{file}.md5sum"), file = input_files)
     output:
         os.path.join(output_folder, "all_md5sums.txt")
     shell:

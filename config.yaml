@@ -1,2 +1,4 @@
 input_folder: download
 output_folder: results
+reference: 'analysis/ref/GRCh38/GCA_000001405.15_GRCh38_no_alt_analysis_set.fna.gz'
+reference_version: 'GRCh38'
