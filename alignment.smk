@@ -14,7 +14,7 @@ SCRATCH_DIR = os.environ.get('TMPDIR')
 
 # ----------------------------------------------------------------------------------- #
 # Extract user-defined input and output directories and reference file from the configuration file
-INPUT_DIR = config["input_folder"]
+INPUT_DIR = config["fastq_folder"]
 OUTPUT_DIR = config["output_folder"]
 REFERENCE_FILE = config["reference"]
 # ----------------------------------------------------------------------------------- #
