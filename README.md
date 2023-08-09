@@ -10,3 +10,8 @@ Code for the aldosterone-producing adenoma sequencing project
 ```bash
     sbatch run_alignment.sh
 ```
+
+## merge all the lane bam files into one sample bam file
+```bash
+    sbatch merge_bams.sh
+```
