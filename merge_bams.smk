@@ -41,7 +41,7 @@ rule merge_bam_files:
     shell:
         """
         # Write the BAM file names to merge into a list file
-        echo "{input.bam_files}" > "{params.list_file}"
+        echo "{input.bam_files}" | tr " " "\\n" > "{params.list_file}"
         
         # Create the merged directory if it does not exist
         mkdir -p results/merged
