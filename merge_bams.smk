@@ -1,29 +1,59 @@
 import glob
 import re
+import functools
 
 # Read the configuration file
 configfile: "config.yaml"
 
-# Set a default input folder if not specified in the config file
-aligned_folder = config.get("aligned_folder", "results/aligned/")
+# ----------------------------------------------------------------------------------- #
+# Define temporary directory using an environment variable (usually set by the cluster scheduler)
+SCRATCH_DIR = os.environ.get('TMPDIR')
+# ----------------------------------------------------------------------------------- #
+
+
+# ----------------------------------------------------------------------------------- #
+# Define result directories using functools.partial to join paths with the output folder
+prefix_results = functools.partial(os.path.join, config['output_folder'])
+ALIGNED_DIR = prefix_results('aligned')
+MERGE_DIR = prefix_results('merged')
+LOG_DIR = prefix_results('logs')
+# ----------------------------------------------------------------------------------- #
+
+print(ALIGNED_DIR)
+
+# ----------------------------------------------------------------------------------- #
+# Helper functions
 
 # Function to find all unique sample prefixes
 def get_samples():
     samples = set()
-    for file in glob.glob(aligned_folder + "*.bam"):
+    for file in glob.glob(ALIGNED_DIR + "/" + "*.bam"):
         # Extract just the filename without the directory
-        filename = file.replace(aligned_folder, "")
+        filename = file.replace(ALIGNED_DIR + "/", "")
         
         m = re.match(r"(.+)_DNA_(\d+)_(.+)_S\d+_L\d+_lane\d+\.bam", filename)
         if m:
             samples.add(f"{m.group(1)}_DNA_{m.group(2)}_{m.group(3)}")
     return list(samples)
 
+# Function to return the number of threads for samtools sort
+def get_merge_threads(wildcards, threads):
+    return threads
 
+# Function to return the memory based on the number of threads
+def get_mem_from_threads(wildcards, threads):
+    return threads * 1200
+# ----------------------------------------------------------------------------------- #
+
+
+# ----------------------------------------------------------------------------------- #
 # List of unique samples
 samples = get_samples()
+# ----------------------------------------------------------------------------------- #
 
-print(samples)
+
+# ----------------------------------------------------------------------------------- #
+# Define the pipeline rules
 
 # Define the rule to collect all the targets
 rule all:
@@ -33,11 +63,19 @@ rule all:
 # Define the rule to merge BAM files
 rule merge_bam_files:
     input:
-        bam_files = lambda wildcards: glob.glob(aligned_folder + wildcards.sample + "_*.bam")
+        bam_files = lambda wildcards: glob.glob(ALIGNED_DIR + wildcards.sample + "_*.bam")
     output:
-        bam = "results/merged/{sample}.merged.bam"
+        bam = os.path.join(MERGE_DIR, '{sample}.merged.bam'),
     params:
-        list_file = "results/merged/{sample}.bamlist"
+        list_file = os.path.join(MERGE_DIR, '{sample}.bamlist'),
+    threads: 2
+    resources:
+        mem_mb = get_mem_from_threads,      # Memory in MB based on the number of threads
+        time = '24:00:00',                  # Time limit for the job
+        tmpdir = SCRATCH_DIR,               # Temporary directory
+        merge_threads = get_merge_threads,  # Number of threads for SAMtools sort
+    log:
+        merge = os.path.join(LOG_DIR, 'merge.samtools.{sample}.log'),
     shell:
         """
         # Write the BAM file names to merge into a list file
@@ -47,8 +85,9 @@ rule merge_bam_files:
         mkdir -p results/merged
         
         # Use samtools to merge the BAM files
-        samtools merge -@ 2 -O BAM -b "{params.list_file}" "{output.bam}"
+        samtools merge -@{resources.merge_threads} -O BAM -b "{params.list_file}" "{output.bam}" 2> {log.merge}
         
         # Remove the list file
         rm "{params.list_file}"
         """
+# ----------------------------------------------------------------------------------- #
