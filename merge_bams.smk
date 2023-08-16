@@ -14,12 +14,12 @@ SCRATCH_DIR = os.environ.get('TMPDIR')
 # ----------------------------------------------------------------------------------- #
 # Define result directories using functools.partial to join paths with the output folder
 prefix_results = functools.partial(os.path.join, config['output_folder'])
-ALIGNED_DIR = prefix_results('aligned')
+# TODO: ahs to be adapted to the config file
+ALIGNED_DIR = config.get("aligned_folder", "results/aligned/")
 MERGE_DIR = prefix_results('merged')
 LOG_DIR = prefix_results('logs')
 # ----------------------------------------------------------------------------------- #
 
-print(ALIGNED_DIR)
 
 # ----------------------------------------------------------------------------------- #
 # Helper functions
@@ -27,9 +27,9 @@ print(ALIGNED_DIR)
 # Function to find all unique sample prefixes
 def get_samples():
     samples = set()
-    for file in glob.glob(ALIGNED_DIR + "/" + "*.bam"):
+    for file in glob.glob(ALIGNED_DIR + "*.bam"):
         # Extract just the filename without the directory
-        filename = file.replace(ALIGNED_DIR + "/", "")
+        filename = file.replace(ALIGNED_DIR, "")
         
         m = re.match(r"(.+)_DNA_(\d+)_(.+)_S\d+_L\d+_lane\d+\.bam", filename)
         if m:
@@ -68,7 +68,7 @@ rule merge_bam_files:
         bam = os.path.join(MERGE_DIR, '{sample}.merged.bam'),
     params:
         list_file = os.path.join(MERGE_DIR, '{sample}.bamlist'),
-    threads: 2
+    threads: 8
     resources:
         mem_mb = get_mem_from_threads,      # Memory in MB based on the number of threads
         time = '24:00:00',                  # Time limit for the job
