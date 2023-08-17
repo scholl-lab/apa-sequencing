@@ -15,3 +15,8 @@ Code for the aldosterone-producing adenoma sequencing project
 ```bash
     sbatch merge_bams.sh
 ```
+
+## deduplicate the merged bam files
+```bash
+    sbatch run_dedup_bams.sh
+```
