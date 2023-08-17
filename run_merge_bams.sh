@@ -11,7 +11,7 @@
 # https://hpc-docs.cubi.bihealth.org/best-practice/temp-files/#tmpdir-and-the-scheduler
 # https://bihealth.github.io/bih-cluster/slurm/snakemake/#custom-logging-directory
 
-# First, point TMPDIR to the scratch in your home as mktemp will use thi
+# First, point TMPDIR to the scratch in your home as mktemp will use this
 export TMPDIR=$HOME/scratch/tmp
 # Second, create another unique temporary directory within this directory
 export TMPDIR=$(mktemp -d)

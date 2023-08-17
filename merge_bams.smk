@@ -14,7 +14,7 @@ SCRATCH_DIR = os.environ.get('TMPDIR')
 # ----------------------------------------------------------------------------------- #
 # Define result directories using functools.partial to join paths with the output folder
 prefix_results = functools.partial(os.path.join, config['output_folder'])
-# TODO: ahs to be adapted to the config file
+# TODO: has to be adapted to the config file
 ALIGNED_DIR = config.get("aligned_folder", "results/aligned/")
 MERGE_DIR = prefix_results('merged')
 LOG_DIR = prefix_results('logs')

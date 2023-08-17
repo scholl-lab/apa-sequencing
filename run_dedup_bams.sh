@@ -1,6 +1,6 @@
 #!/bin/bash
 #
-#SBATCH --job-name=sm_alignment_main_job
+#SBATCH --job-name=sm_dedup_main_job
 #SBATCH --ntasks=1
 #SBATCH --nodes=1
 #SBATCH --time=168:00:00
@@ -22,5 +22,5 @@ mkdir -p slurm_logs
 export SBATCH_DEFAULTS=" --output=slurm_logs/%x-%j.log"
 
 date
-srun snakemake -s alignment.smk --use-conda --profile=cubi-v1 -j10
+srun snakemake -s dedup_bams.smk --use-conda --profile=cubi-v1 -j20
 date
