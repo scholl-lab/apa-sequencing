@@ -1,5 +1,6 @@
 # apa-sequencing
-Code for the aldosterone-producing adenoma sequencing project
+Code for the aldosterone-producing adenoma sequencing project.
+It also contains general descriptions about the project, e.g. aim, sample collection and library preparation.
 
 ## calculate all md5 checksums in input folder and subfolders
 ```bash
