@@ -30,30 +30,32 @@ def get_dedup_threads(wildcards, threads):
 
 # Function to return the memory based on the number of threads
 def get_mem_from_threads(wildcards, threads):
-    return threads * 2000
+    return threads * 4400
 # ----------------------------------------------------------------------------------- #
 
 # ----------------------------------------------------------------------------------- #
 # Define the pipeline rules
 
 # Define the rule to collect all the dedup targets
+# issues with disk space fix:
+# https://gatk.broadinstitute.org/hc/en-us/community/posts/360067258451-MarkDuplicatesSpark-doesn-t-work-for-large-bam-files
 rule all:
     input:
         expand("results/dedup/{sample}.merged.dedup.bam", sample=[os.path.basename(x).replace('.merged.bam','') for x in get_merged_files()])
 
 # Define the rule to deduplicate BAM files
+# maybe have to set java options temp https://hpc.nih.gov/apps/GATK.html
 rule deduplicate_bam_files:
     input:
         bam_file = os.path.join(MERGE_DIR, '{sample}.merged.bam')
     output:
         dedup_bam = os.path.join(DEDUP_DIR, '{sample}.merged.dedup.bam'),
         metrics = os.path.join(DEDUP_DIR, '{sample}.merged.dedup_metrics.txt')
-    threads: 16
+    threads: 4
     resources:
         mem_mb = get_mem_from_threads,      # Memory in MB based on the number of threads
-        time = '24:00:00',                  # Time limit for the job
+        time = '72:00:00',                  # Time limit for the job
         tmpdir = SCRATCH_DIR,                # Temporary directory
-        dedup_threads = get_dedup_threads,  # Number of threads for MarkDuplicatesSpark
     conda:
         "gatk"  # This sets the Conda environment for this rule
     log:
@@ -64,11 +66,11 @@ rule deduplicate_bam_files:
         mkdir -p results/dedup
         
         # Use GATK to deduplicate the BAM file
-        gatk MarkDuplicatesSpark \
+        gatk --java-options '-Xmx{resources.mem_mb}m -Djava.io.tmpdir={resources.tmpdir}' MarkDuplicates \
             -I "{input.bam_file}" \
             -O "{output.dedup_bam}" \
             -M "{output.metrics}" \
-            --create-output-bam-index \
-            --conf 'spark.executor.cores={resources.dedup_threads}' 2> {log.dedup}
+            --CREATE_INDEX \
+            --VALIDATION_STRINGENCY SILENT 2> {log.dedup}
         """
 # ----------------------------------------------------------------------------------- #
