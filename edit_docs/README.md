@@ -45,8 +45,3 @@ Rendering HTML widgets for PDF requires webshot and phantomjs [FROM:](https://bo
 install.packages("webshot")
 webshot::install_phantomjs()
 ```
-
-## TODO
-- automatic loading and filtering of current result tables in all Rmd files
-- change scripts to load the gzipped files
-- make a script that runs the above commands to re-generate the pages website
