@@ -1,0 +1,43 @@
+--- 
+title: "The apa-sequencing Documentation"
+author: "Frederike Butz, Bernt Popp, Ute Scholl"
+date: "`r Sys.Date()`"
+site: bookdown::bookdown_site
+output: bookdown::gitbook
+bibliography: [apa-sequencing.bib]
+csl: apa-sequencing.csl
+link-citations: yes
+colorlinks: yes
+description: "This documentation is intended to describe the apa-sequencing project"
+graphics: yes
+github-repo: scholl-lab/apa-sequencing
+url: https://scholl-lab.github.io/apa-sequencing/
+---
+
+---
+
+# Preface {-}
+
+---------------------------------------
+
+This documentation is intended to describe the [apa-sequencing](https://github.com/scholl-lab/apa-sequencing) project.
+
+## Objective {-}
+
+
+
+## Methods {-}
+
+
+
+## Results {-}
+
+
+
+## Conclusion {-}
+
+
+
+## Outlook {-}
+
+

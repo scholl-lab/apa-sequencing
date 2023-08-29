@@ -1,0 +1,18 @@
+book_filename: "APA_documentation.Rmd"
+toc:
+  collapse: none
+rmd_files: 
+    - "index.Rmd"
+    - "references.Rmd"
+delete_merged_file: true
+language:
+  ui:
+    edit: "Edit"
+    chapter_name: "Chapter | "
+download:
+  - ["APA_documentation.pdf", "PDF"]
+  - ["APA_documentation.epub", "EPUB"]
+  - ["APA_documentation.docx", "DOCX"]
+view: https://github.com/scholl-lab/apa-sequencing/tree/master/docs/%s
+edit: https://github.com/scholl-lab/apa-sequencing/tree/master/edit_docs/%s
+output_dir: "../docs"
