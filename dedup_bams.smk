@@ -66,7 +66,7 @@ rule deduplicate_bam_files:
         mkdir -p results/dedup
         
         # Use GATK to deduplicate the BAM file
-        gatk --java-options '-Xmx{resources.mem_mb}m -Djava.io.tmpdir={resources.tmpdir}' MarkDuplicates \
+        gatk --java-options '-Xms4000m -Xmx7g -Djava.io.tmpdir={resources.tmpdir}' MarkDuplicates \
             -I "{input.bam_file}" \
             -O "{output.dedup_bam}" \
             -M "{output.metrics}" \
