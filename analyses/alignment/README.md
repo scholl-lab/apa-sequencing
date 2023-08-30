@@ -19,3 +19,8 @@
 ```bash
     sbatch run_dedup_bams.sh
 ```
+
+## run bqsr for the deduplicated bam files
+```bash
+    sbatch run_bqsr_bams.sh
+```
