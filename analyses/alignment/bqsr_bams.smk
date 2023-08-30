@@ -25,13 +25,9 @@ LOG_DIR = prefix_results('logs')
 def get_dedup_files():
     return glob.glob(DEDUP_DIR + "/*.merged.dedup.bam")
 
-# Function to return the number of threads for recalibration steps
-def get_recal_threads(wildcards, threads):
-    return threads
-
 # Function to return the memory based on the number of threads
 def get_mem_from_threads(wildcards, threads):
-    return threads * 2000
+    return threads * 4400
 # ----------------------------------------------------------------------------------- #
 
 # ----------------------------------------------------------------------------------- #
@@ -42,17 +38,17 @@ rule all:
     input:
         expand("results/bqsr/{sample}.merged.dedup.bqsr.bam", sample=[os.path.basename(x).replace('.merged.dedup.bam','') for x in get_dedup_files()])
 
-# Define the rule to perform base recalibration using BaseRecalibratorSpark
+# Define the rule to perform base recalibration using BaseRecalibrator
 rule base_recalibration:
     input:
         bam_file = os.path.join(DEDUP_DIR, '{sample}.merged.dedup.bam')
     output:
         recal_table = os.path.join(BQSR_DIR, '{sample}.merged.dedup.recal_data.table')
-    threads: 8
+    threads: 4
     resources:
-        mem_mb = get_mem_from_threads,
-        time = '24:00:00',
-        tmpdir = SCRATCH_DIR
+        mem_mb = get_mem_from_threads,      # Memory in MB based on the number of threads
+        time = '72:00:00',                  # Time limit for the job
+        tmpdir = SCRATCH_DIR,               # Temporary directory
     conda:
         "gatk"
     log:
@@ -62,39 +58,38 @@ rule base_recalibration:
         # Create the BQSR directory if it does not exist
         mkdir -p {BQSR_DIR}
         
-        # Use GATK's BaseRecalibratorSpark to perform base recalibration
-        gatk BaseRecalibratorSpark \
+        # Use GATK's BaseRecalibrator to perform base recalibration
+        gatk --java-options '-Xms4000m -Xmx7g -Djava.io.tmpdir={resources.tmpdir}' BaseRecalibrator \
             -I "{input.bam_file}" \
             -R analysis/ref/GRCh38/GCA_000001405.15_GRCh38_no_alt_analysis_set.fna \
             --known-sites analysis/GATK_resource_bundle/resources_broad_hg38_v0_Homo_sapiens_assembly38.dbsnp138.vcf \
             --known-sites analysis/GATK_resource_bundle/resources_broad_hg38_v0_Homo_sapiens_assembly38.known_indels.vcf.gz \
             --known-sites analysis/GATK_resource_bundle/resources_broad_hg38_v0_Mills_and_1000G_gold_standard.indels.hg38.vcf.gz \
-            -O "{output.recal_table}" \
-            --conf 'spark.executor.cores={threads}' 2> {log.recal}
+            -O "{output.recal_table}" 2> {log.recal}
         """
 
-# Define the rule to apply BQSR using ApplyBQSRSpark
+# Define the rule to apply BQSR using ApplyBQSR
 rule apply_bqsr:
     input:
         bam_file = os.path.join(DEDUP_DIR, '{sample}.merged.dedup.bam'),
         recal_table = os.path.join(BQSR_DIR, '{sample}.merged.dedup.recal_data.table')
     output:
         bqsr_bam = os.path.join(BQSR_DIR, '{sample}.merged.dedup.bqsr.bam')
-    threads: 8
+    threads: 4
     resources:
-        mem_mb = get_mem_from_threads,
-        time = '24:00:00',
-        tmpdir = SCRATCH_DIR
+        mem_mb = get_mem_from_threads,      # Memory in MB based on the number of threads
+        time = '72:00:00',                  # Time limit for the job
+        tmpdir = SCRATCH_DIR,               # Temporary directory
     conda:
         "gatk"
     log:
         apply_bqsr = os.path.join(LOG_DIR, 'apply_bqsr.gatk.{sample}.log'),
     shell:
         """
-        # Use GATK's ApplyBQSRSpark to apply base recalibration
-        gatk ApplyBQSRSpark \
+        # Use GATK's ApplyBQSRS to apply base recalibration
+        gatk --java-options '-Xms4000m -Xmx7g -Djava.io.tmpdir={resources.tmpdir} -Dsamjdk.compression_level=6' ApplyBQSRS \
             -I "{input.bam_file}" \
             -bqsr "{input.recal_table}" \
-            -O "{output.bqsr_bam}" \
-            --conf 'spark.executor.cores={threads}' 2> {log.apply_bqsr}
+            -O "{output.bqsr_bam}" 2> {log.apply_bqsr}
         """
+# ----------------------------------------------------------------------------------- #
