@@ -87,7 +87,7 @@ rule apply_bqsr:
     shell:
         """
         # Use GATK's ApplyBQSRS to apply base recalibration
-        gatk --java-options '-Xms4000m -Xmx7g -Djava.io.tmpdir={resources.tmpdir} -Dsamjdk.compression_level=6' ApplyBQSRS \
+        gatk --java-options '-Xms4000m -Xmx7g -Djava.io.tmpdir={resources.tmpdir} -Dsamjdk.compression_level=6' ApplyBQSR \
             -I "{input.bam_file}" \
             -bqsr "{input.recal_table}" \
             -O "{output.bqsr_bam}" 2> {log.apply_bqsr}
