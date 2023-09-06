@@ -1,4 +1,4 @@
-# Code for alignment and bam reprocessing
+# Code for alignment and BAM reprocessing
 
 ## calculate all md5 checksums in input folder and subfolders
 ```bash
