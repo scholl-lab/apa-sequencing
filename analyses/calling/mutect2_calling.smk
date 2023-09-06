@@ -15,10 +15,10 @@ def get_mem_from_threads(wildcards, threads):
 # ----------------------------------------------------------------------------------- #
 
 # ----------------------------------------------------------------------------------- #
-# Extract user-defined input and output directories and reference file from the configuration file
+# Extract user-defined input and output directories and reference (unpacked) file from the configuration file
 INPUT_DIR = config["final_bam_folder"]
 OUTPUT_DIR = config["output_folder"]
-REFERENCE_FILE = config["reference"]
+REFERENCE_FILE = config["reference_unpacked"]
 PANEL_OF_NORMALS = config["panel_of_normals"]
 AF_ONLY_GNOMAD = config["af_only_gnomad"]
 
@@ -87,6 +87,6 @@ rule mutect2_call:
             --panel-of-normals {params.panel_of_normals} \
             --f1r2-tar-gz {params.individual}_{params.analysis}_{wildcards.chromosome}.f1r2.tar.gz \
             -L {wildcards.chromosome} \
-            -O {output.variant_file} > {log.mutect2}
+            -O {output.variant_file} 2> {log.mutect2}
         """
 # ----------------------------------------------------------------------------------- #
