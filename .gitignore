@@ -3,3 +3,6 @@
 
 # mac specific .DS_Store file
 .DS_Store
+
+# local testing files
+TESTING.md
