@@ -13,10 +13,10 @@ def get_input_files(folder):
     return input_files
 
 # Obtain input and output folder paths from the configuration file
-input_folder = config["input_folder"]
+fastq_folder = config["fastq_folder"]
 output_folder = config["output_folder"]
 md5sum_folder = os.path.join(output_folder, "md5sum")
-input_files = get_input_files(input_folder)
+input_files = get_input_files(fastq_folder)
 
 # Define the Snakemake rules
 
@@ -28,7 +28,7 @@ rule all:
 # Rule "calculate_md5sum": Calculates the md5sum for each individual .fastq.gz file and writes it to a corresponding .md5sum file
 rule calculate_md5sum:
     input:
-        fastq = os.path.join(input_folder, "{file}")
+        fastq = os.path.join(fastq_folder, "{file}")
     output:
         md5sum = os.path.join(md5sum_folder, "{file}.md5sum")
     shell:
