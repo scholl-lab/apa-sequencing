@@ -10,3 +10,11 @@ reference_version: 'GRCh38'
 mutect_scatter_by_chromosome: True
 final_bam_file_extension: ".merged.dedup.bqsr.bam"
 scattered_vcf_folder: results/variant_calls
+vcf_file_extension: ".vcf.gz"
+metadata_file: "calling_metadata.tsv"
+scatter_name_prefix: "chr"
+scatter_name_delimiter: "."
+scattering_interval_ranges:
+  - '1-22'
+  - 'X'
+  - 'Y'
