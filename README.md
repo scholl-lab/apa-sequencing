@@ -17,3 +17,4 @@ Project documentation on [GitHub Pages](https://scholl-lab.github.io/apa-sequenc
 - GNAQ
 - GNA11
 - CADM1
+- GNAS
