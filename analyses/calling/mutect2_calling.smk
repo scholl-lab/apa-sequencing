@@ -39,7 +39,7 @@ VARIANT_DIR = prefix_results('variant_calls')
 LOG_DIR = prefix_results('logs')
 
 # List of chromosomes to loop through
-chromosomes = [f"chr{i}" for i in range(1, 22)] + ["chrX", "chrY"]
+chromosomes = [f"chr{i}" for i in range(1, 23)] + ["chrX", "chrY"]
 # ----------------------------------------------------------------------------------- #
 
 # ----------------------------------------------------------------------------------- #
@@ -98,7 +98,7 @@ rule call_variants:
             $normal_sample_option \
             --germline-resource {params.af_only_gnomad} \
             --panel-of-normals {params.panel_of_normals} \
-            --f1r2-tar-gz {OUTPUT_DIR}/{params.individual}_{params.analysis}_{wildcards.chromosome}.f1r2.tar.gz \
+            --f1r2-tar-gz {VARIANT_DIR}/{params.individual}_{params.analysis}_{wildcards.chromosome}.f1r2.tar.gz \
             $scatter_option \
             -O {output.variant_file} 2> {log.mutect2}
         """

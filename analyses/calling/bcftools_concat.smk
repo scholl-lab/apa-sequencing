@@ -78,7 +78,7 @@ SCATTER_NAME_PREFIX = config.get("scatter_name_prefix", "")
 # Define the scattering interval names based on the ranges and prefixes specified in the
 # configuration file. This allows for a flexible definition of intervals, accommodating 
 # various naming conventions and range specifications.
-SCATTERING_INTERVAL_RANGES = config.get("scattering_interval_ranges", [str(i) for i in range(1, 22)] + ['X', 'Y'])
+SCATTERING_INTERVAL_RANGES = config.get("scattering_interval_ranges", [str(i) for i in range(1, 23)] + ['X', 'Y'])
 SCATTERING_INTERVAL_NAMES = expand_interval_names(SCATTERING_INTERVAL_RANGES, SCATTER_NAME_PREFIX)
 
 # Get the delimiter for scatter names; default is "."

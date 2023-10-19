@@ -37,7 +37,7 @@ MERGED_DIR = prefix_results('variant_merge')
 LOG_DIR = prefix_results('logs')
 
 # List of chromosomes for processing
-chromosomes = [f"chr{i}" for i in range(1, 22)] + ["chrX", "chrY"]
+chromosomes = [f"chr{i}" for i in range(1, 23)] + ["chrX", "chrY"]
 # ----------------------------------------------------------------------------------- #
 
 # ----------------------------------------------------------------------------------- #
