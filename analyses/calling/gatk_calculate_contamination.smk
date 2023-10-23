@@ -83,7 +83,8 @@ rule calculate_contamination:
         tumor_pileup = lambda wildcards: os.path.join(CONTAMINATION_DIR, metadata_dict[f"{wildcards.individual1}_{wildcards.analysis}"]['bam1_file_basename'] + ".getpileupsummaries.table"),
         normal_pileup = lambda wildcards: os.path.join(CONTAMINATION_DIR, metadata_dict[f"{wildcards.individual1}_{wildcards.analysis}"]['bam2_file_basename'] + ".getpileupsummaries.table")
     output:
-        contamination_table = os.path.join(CONTAMINATION_DIR, "{individual1}_{analysis}.contamination.table")
+        contamination_table = os.path.join(CONTAMINATION_DIR, "{individual1}_{analysis}.contamination.table"),
+        segments_table = os.path.join(CONTAMINATION_DIR, "{individual1}_{analysis}.segments.table")
     threads: 4  # Adjust as necessary
     resources:
         mem_mb = get_mem_from_threads,
@@ -98,5 +99,8 @@ rule calculate_contamination:
         gatk --java-options '-Xms4000m -Xmx{resources.mem_mb}m -Djava.io.tmpdir={resources.tmpdir}' CalculateContamination \
             -I {input.tumor_pileup} \
             -matched {input.normal_pileup} \
+            --tumor-segmentation {output.segments_table} \
             -O {output.contamination_table} 2> {log}
         """
+
+# ----------------------------------------------------------------------------------- #
