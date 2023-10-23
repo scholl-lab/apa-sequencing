@@ -51,7 +51,7 @@ rule all:
             [
                 f"{MERGED_DIR}/{{individual1}}_{{analysis}}.vcf.gz",
                 f"{MERGED_DIR}/{{individual1}}_{{analysis}}.vcf.gz.tbi",
-                f"{MERGED_DIR}/{{individual1}}_{{analysis}}.stats",
+                f"{MERGED_DIR}/{{individual1}}_{{analysis}}.vcf.gz.stats",
                 f"{MERGED_DIR}/{{individual1}}_{{analysis}}_read-orientation-model.tar.gz"
             ],
             individual1=[row['individual1'] for row in metadata_dict.values()], 
@@ -92,7 +92,7 @@ rule merge_stats:
     input:
         lambda wildcards: [f"{VARIANT_DIR}/{wildcards.individual1}_{wildcards.analysis}_{chrom}.vcf.gz.stats" for chrom in chromosomes]
     output:
-        f"{MERGED_DIR}/{{individual1}}_{{analysis}}.stats"
+        f"{MERGED_DIR}/{{individual1}}_{{analysis}}.vcf.gz.stats"
     params:
         input_files = lambda wildcards: ' '.join(['-stats ' + item for item in [f"{VARIANT_DIR}/{wildcards.individual1}_{wildcards.analysis}_{chrom}.vcf.gz.stats" for chrom in chromosomes]])
     threads: 4
