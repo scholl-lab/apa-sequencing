@@ -44,11 +44,13 @@ chromosomes = [f"chr{i}" for i in range(1, 23)] + ["chrX", "chrY"]
 # Snakemake Rules
 
 # Main rule to define the expected final outputs
+# vcf.gz and stats files should have same basename
 rule all:
     input:
         expand(
             [
                 f"{MERGED_DIR}/{{individual1}}_{{analysis}}.vcf.gz",
+                f"{MERGED_DIR}/{{individual1}}_{{analysis}}.vcf.gz.tbi",
                 f"{MERGED_DIR}/{{individual1}}_{{analysis}}.stats",
                 f"{MERGED_DIR}/{{individual1}}_{{analysis}}_read-orientation-model.tar.gz"
             ],
