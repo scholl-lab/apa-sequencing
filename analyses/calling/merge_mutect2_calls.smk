@@ -49,19 +49,20 @@ rule all:
         expand(
             [
                 f"{MERGED_DIR}/{{individual1}}_{{analysis}}.vcf.gz",
-                f"{MERGED_DIR}/{{individual1}}_{{analysis}}_merged.stats",
+                f"{MERGED_DIR}/{{individual1}}_{{analysis}}.stats",
                 f"{MERGED_DIR}/{{individual1}}_{{analysis}}_read-orientation-model.tar.gz"
             ],
             individual1=[row['individual1'] for row in metadata_dict.values()], 
             analysis=[row['analysis'] for row in metadata_dict.values()]
         )
 
-# Rule to merge scattered VCF files across chromosomes
+# Rule to merge scattered VCF files across chromosomes and create a VCF index
 rule merge_vcfs:
     input:
         lambda wildcards: [f"{VARIANT_DIR}/{wildcards.individual1}_{wildcards.analysis}_{chrom}.vcf.gz" for chrom in chromosomes]
     output:
-        f"{MERGED_DIR}/{{individual1}}_{{analysis}}.vcf.gz"
+        vcf=f"{MERGED_DIR}/{{individual1}}_{{analysis}}.vcf.gz",
+        index=f"{MERGED_DIR}/{{individual1}}_{{analysis}}.vcf.gz.tbi"
     params:
         input_files = lambda wildcards: ' '.join(['-I ' + item for item in [f"{VARIANT_DIR}/{wildcards.individual1}_{wildcards.analysis}_{chrom}.vcf.gz" for chrom in chromosomes]])
     threads: 4
@@ -77,15 +78,19 @@ rule merge_vcfs:
         """
         gatk --java-options '-Xms4000m -Xmx{resources.mem_mb}m -Djava.io.tmpdir={resources.tmpdir}' GatherVcfs \
         {params.input_files} \
-        -O {output} 2> {log}
+        -O {output.vcf} 2> {log}
+        
+        # Index the merged VCF
+        tabix -p vcf {output.vcf}
         """
+
 
 # Rule to merge stats files corresponding to VCFs
 rule merge_stats:
     input:
         lambda wildcards: [f"{VARIANT_DIR}/{wildcards.individual1}_{wildcards.analysis}_{chrom}.vcf.gz.stats" for chrom in chromosomes]
     output:
-        f"{MERGED_DIR}/{{individual1}}_{{analysis}}_merged.stats"
+        f"{MERGED_DIR}/{{individual1}}_{{analysis}}.stats"
     params:
         input_files = lambda wildcards: ' '.join(['-stats ' + item for item in [f"{VARIANT_DIR}/{wildcards.individual1}_{wildcards.analysis}_{chrom}.vcf.gz.stats" for chrom in chromosomes]])
     threads: 4
