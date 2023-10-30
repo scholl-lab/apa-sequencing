@@ -61,13 +61,13 @@ The pipeline produces the following outputs in the output_folder specified in th
 Each VCF file is named with the format `<individual1>_<analysis>_<chromosome>.vcf.gz`.
 
 # TODO
-- [ ] script to merge VCF files, f1r2 files, and stats files
+- [x] script to merge VCF files, f1r2 files, and stats files
     - use GatherVcfs (Picard) to merge VCF files
     - use gatk MergeMutectStats to merge stats files
     - the f1r2 files are not merged but are all used as input for LearnReadOrientationModel
-- [ ] script for LearnReadOrientationModel
+- [x] script for LearnReadOrientationModel
     - this should be part of the merge script
 - [ ] script for FilterMutectCalls
-- [ ] script for CalculateContamination (plus GetPileupSummaries)
+- [x] script for CalculateContamination (plus GetPileupSummaries)
 
 --> see: https://gatk.broadinstitute.org/hc/en-us/articles/360035531132--How-to-Call-somatic-mutations-using-GATK4-Mutect2
