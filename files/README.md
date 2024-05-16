@@ -1,4 +1,4 @@
-# instructions how to generate medtadata for the samples in a project
+# Instructions how to generate metadata for the samples in a project
 
 ## 1) Alignment metadata for the genomes project part
 
