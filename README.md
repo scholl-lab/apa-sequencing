@@ -1,11 +1,14 @@
-# Aldosterone-Producing Adenoma sequencing project (apa-sequencing)
-Code for the aldosterone-producing adenoma sequencing project.
+# Aldosterone-Producing Adenoma sequencing project (APA-sequencing)
+
+Code for the aldosterone-producing adenoma (APA) sequencing project.
 It also contains general descriptions about the project, e.g. aim, sample collection and library preparation.
 
 ## Documentation
+
 Further project documentation on [GitHub Pages](https://scholl-lab.github.io/apa-sequencing/).
 
-## List of currently known APA-assocaited genes
+## List of currently known APA-associated genes
+
 - KCNJ5
 - CACNA1D
 - ATP1A1
