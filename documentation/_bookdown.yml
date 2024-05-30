@@ -15,4 +15,4 @@ download:
   - ["APA_documentation.docx", "DOCX"]
 view: https://github.com/scholl-lab/apa-sequencing/tree/main/docs/%s
 edit: https://github.com/scholl-lab/apa-sequencing/tree/main/edit_docs/%s
-output_dir: "../docs"
+output_dir: "build"
