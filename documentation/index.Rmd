@@ -30,6 +30,7 @@ Primary aldosteronism (PA) is the most common cause of secondary hypertension an
 
 ### Sample selection and preparation {-}
 
+Archived formalin-fixed paraffin-embedded (FFPE) material was selected from individuals with primary aldosteronism.
 
 ### Targeted Sanger sequencing for known mutations {-}
 
