@@ -28,9 +28,9 @@ Primary aldosteronism (PA) is the most common cause of secondary hypertension an
 
 ## Methods {-}
 
-### Sample selection and preparation
+### Sample selection and preparation {-}
 
-### Analysis of sequencing data
+### Analysis of sequencing data {-}
 We implemented a comprehensive workflow for aligning, calling variants, and annotating sequencing data. The raw sequencing data files were obtained from the sequencing provider in FASTQ format. The BWA (Burrows-Wheeler Aligner) tool was used to align the sequences to the hg38 the reference genome. The GATK (Genome Analysis Toolkit) was used for variant calling. We used SnpEff and SnpSift to perform annotations. The GitHub repository contains detailed instructions as well as the complete codebase.
 
 ## Results {-}
