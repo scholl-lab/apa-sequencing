@@ -59,6 +59,29 @@
   
   div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
 </style>
+<style type="text/css">
+/* Used with Pandoc 2.11+ new --citeproc when CSL is used */
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
+  margin-bottom: 0em;
+}
+.hanging div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
+}
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
+}
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
+}
+div.csl-indent {
+  margin-left: 2em;
+}
+</style>
 
 <link rel="stylesheet" href="style.css" type="text/css" />
 </head>
@@ -118,7 +141,7 @@
 <p>This documentation is intended to describe the <a href="https://github.com/scholl-lab/apa-sequencing">apa-sequencing</a> project.</p>
 <div id="objective" class="section level2 unnumbered hasAnchor">
 <h2>Objective<a href="index.html#objective" class="anchor-section" aria-label="Anchor link to header"></a></h2>
-<p>Primary aldosteronism (PA) is the most common cause of secondary hypertension and is more common than primary hypertension in causing secondary diseases such as stroke, myocardial infarction, heart and renal failure. It is caused by inappropriately increased, partially autonomous synthesis and secretion of the steroid hormone aldosterone with consequent increased renal and intestinal sodium and water reabsorption and increased potassium secretion. The most common causes are a unilateral benign adrenal tumour (aldosterone-producing adenoma, APA) or bilateral aldosteronism. In recent years, the molecular mechanisms leading to autonomous aldosterone production have become the focus of increasing scientific attention. It has been shown that approximately 95% of all APAs have somatic mutations in known disease genes, mainly affecting ion channels and transporters: About 40% have <em>KCNJ5</em> mutations; <em>CACNA1D</em> is the second most commonly affected gene (about 20%). Other less common somatic mutations include mutations in the ATPases <em>ATP1A1</em> and <em>ATP2B3</em> and the gene encoding b-catenin, <em>CTNNB1</em>.</p>
+<p>Primary aldosteronism (PA) is the most common cause of secondary hypertension and is more common than primary hypertension in causing secondary diseases such as stroke, myocardial infarction, heart and renal failure. It is caused by inappropriately increased, partially autonomous synthesis and secretion of the steroid hormone aldosterone with consequent increased renal and intestinal sodium and water reabsorption and increased potassium secretion. The most common causes are a unilateral benign adrenal tumour (aldosterone-producing adenoma, APA) or bilateral aldosteronism. In recent years, the molecular mechanisms leading to autonomous aldosterone production have become the focus of increasing scientific attention. It has been shown that approximately 95% of all APAs have somatic mutations in known disease genes, mainly affecting ion channels and transporters: About 40% have <em>KCNJ5</em> (e.g. <span class="citation">(<a href="#ref-choi_k_2011">Choi et al., 2011</a>)</span>) mutations; <em>CACNA1D</em> is the second most commonly affected gene (about 20%). Other less common somatic mutations include mutations in the ATPases <em>ATP1A1</em> and <em>ATP2B3</em> and the gene encoding b-catenin, <em>CTNNB1</em>.</p>
 </div>
 <div id="methods" class="section level2 unnumbered hasAnchor">
 <h2>Methods<a href="index.html#methods" class="anchor-section" aria-label="Anchor link to header"></a></h2>
@@ -142,6 +165,12 @@
 <div id="outlook" class="section level2 unnumbered hasAnchor">
 <h2>Outlook<a href="index.html#outlook" class="anchor-section" aria-label="Anchor link to header"></a></h2>
 
+</div>
+</div>
+<h3>References<a href="references.html#references" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<div id="refs" class="references csl-bib-body hanging-indent" entry-spacing="0" line-spacing="2">
+<div id="ref-choi_k_2011" class="csl-entry">
+Choi, M., Scholl, U. I., Yue, P., Björklund, P., Zhao, B., Nelson-Williams, C., Ji, W., Cho, Y., Patel, A., Men, C. J., Lolis, E., Wisgerhof, M. V., Geller, D. S., Mane, S., Hellman, P., Westin, G., Åkerström, G., Wang, W., Carling, T., &amp; Lifton, R. P. (2011). K <span class="math inline">\(^{\textrm{+}}\)</span> <span>Channel</span> <span>Mutations</span> in <span>Adrenal</span> <span>Aldosterone</span>-<span>Producing</span> <span>Adenomas</span> and <span>Hereditary</span> <span>Hypertension</span>. <em>Science</em>, <em>331</em>(6018), 768–772. <a href="https://doi.org/10.1126/science.1198785">https://doi.org/10.1126/science.1198785</a>
 </div>
 </div>
             </section>
@@ -204,6 +233,20 @@ gitbook.start({
 });
 </script>
 
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    var src = "true";
+    if (src === "" || src === "true") src = "https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.9/latest.js?config=TeX-MML-AM_CHTML";
+    if (location.protocol !== "file:")
+      if (/^https?:/.test(src))
+        src = src.replace(/^https?:/, '');
+    script.src = src;
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
 </body>
 
 </html>
