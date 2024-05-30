@@ -82,7 +82,8 @@
 <li class="chapter" data-level="" data-path="index.html"><a href="index.html#methods"><i class="fa fa-check"></i>Methods</a>
 <ul>
 <li class="chapter" data-level="" data-path="index.html"><a href="index.html#sample-selection-and-preparation"><i class="fa fa-check"></i>Sample selection and preparation</a></li>
-<li class="chapter" data-level="" data-path="index.html"><a href="index.html#analysis-of-sequencing-data"><i class="fa fa-check"></i>Analysis of sequencing data</a></li>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html#targeted-sanger-sequencing-for-known-mutations"><i class="fa fa-check"></i>Targeted Sanger sequencing for known mutations</a></li>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html#analysis-of-high-throughput-sequencing-data"><i class="fa fa-check"></i>Analysis of high-throughput sequencing data</a></li>
 </ul></li>
 <li class="chapter" data-level="" data-path="index.html"><a href="index.html#results"><i class="fa fa-check"></i>Results</a></li>
 <li class="chapter" data-level="" data-path="index.html"><a href="index.html#conclusion"><i class="fa fa-check"></i>Conclusion</a></li>
@@ -117,15 +118,18 @@
 <p>This documentation is intended to describe the <a href="https://github.com/scholl-lab/apa-sequencing">apa-sequencing</a> project.</p>
 <div id="objective" class="section level2 unnumbered hasAnchor">
 <h2>Objective<a href="index.html#objective" class="anchor-section" aria-label="Anchor link to header"></a></h2>
-<p>Primary aldosteronism (PA) is the most common cause of secondary hypertension and is more common than primary hypertension in causing secondary diseases such as stroke, myocardial infarction, heart and renal failure. It is caused by inappropriately increased, partially autonomous synthesis and secretion of the steroid hormone aldosterone with consequent increased renal and intestinal sodium and water reabsorption and increased potassium secretion. The most common causes are a unilateral benign adrenal tumour (aldosterone-producing adenoma, APA) or bilateral aldosteronism. In recent years, the molecular mechanisms leading to autonomous aldosterone production have become the focus of increasing scientific attention. It has been shown that approximately 95% of all APAs have somatic mutations in known disease genes, mainly affecting ion channels and transporters: About 40% have <em>KCNJ5</em> mutations; “CACNA1D* is the second most commonly affected gene (about 20%). Other less common somatic mutations include mutations in the ATPases <em>ATP1A1</em> and <em>ATP2B3</em> and the gene encoding b-catenin, <em>CTNNB1</em>.</p>
+<p>Primary aldosteronism (PA) is the most common cause of secondary hypertension and is more common than primary hypertension in causing secondary diseases such as stroke, myocardial infarction, heart and renal failure. It is caused by inappropriately increased, partially autonomous synthesis and secretion of the steroid hormone aldosterone with consequent increased renal and intestinal sodium and water reabsorption and increased potassium secretion. The most common causes are a unilateral benign adrenal tumour (aldosterone-producing adenoma, APA) or bilateral aldosteronism. In recent years, the molecular mechanisms leading to autonomous aldosterone production have become the focus of increasing scientific attention. It has been shown that approximately 95% of all APAs have somatic mutations in known disease genes, mainly affecting ion channels and transporters: About 40% have <em>KCNJ5</em> mutations; <em>CACNA1D</em> is the second most commonly affected gene (about 20%). Other less common somatic mutations include mutations in the ATPases <em>ATP1A1</em> and <em>ATP2B3</em> and the gene encoding b-catenin, <em>CTNNB1</em>.</p>
 </div>
 <div id="methods" class="section level2 unnumbered hasAnchor">
 <h2>Methods<a href="index.html#methods" class="anchor-section" aria-label="Anchor link to header"></a></h2>
 <div id="sample-selection-and-preparation" class="section level3 unnumbered hasAnchor">
 <h3>Sample selection and preparation<a href="index.html#sample-selection-and-preparation" class="anchor-section" aria-label="Anchor link to header"></a></h3>
 </div>
-<div id="analysis-of-sequencing-data" class="section level3 unnumbered hasAnchor">
-<h3>Analysis of sequencing data<a href="index.html#analysis-of-sequencing-data" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<div id="targeted-sanger-sequencing-for-known-mutations" class="section level3 unnumbered hasAnchor">
+<h3>Targeted Sanger sequencing for known mutations<a href="index.html#targeted-sanger-sequencing-for-known-mutations" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+</div>
+<div id="analysis-of-high-throughput-sequencing-data" class="section level3 unnumbered hasAnchor">
+<h3>Analysis of high-throughput sequencing data<a href="index.html#analysis-of-high-throughput-sequencing-data" class="anchor-section" aria-label="Anchor link to header"></a></h3>
 <p>We implemented a comprehensive workflow for aligning, calling variants, and annotating sequencing data. The raw sequencing data files were obtained from the sequencing provider in FASTQ format. The BWA (Burrows-Wheeler Aligner) tool was used to align the sequences to the hg38 the reference genome. The GATK (Genome Analysis Toolkit) was used for variant calling. We used SnpEff and SnpSift to perform annotations. The GitHub repository contains detailed instructions as well as the complete codebase.</p>
 </div>
 </div>
