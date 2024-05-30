@@ -7,7 +7,7 @@
 
 ## run alignment for FASTQ files in input folder and subfolders
 ```bash
-    sbatch run_alignment.sh
+    sbatch run_alignment_v2.sh
 ```
 
 ## merge all the lane bam files into one sample bam file

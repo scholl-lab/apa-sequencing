@@ -1,6 +1,7 @@
 import os
 import functools
 import csv
+import yaml
 
 # Load configuration file containing user-defined settings
 configfile: "config.yaml"
@@ -12,6 +13,9 @@ SCRATCH_DIR = os.environ.get('TMPDIR')
 
 # ----------------------------------------------------------------------------------- #
 # Extract user-defined input and output directories and reference file from the configuration file
+with open("config.yaml", "r") as stream:
+    config = yaml.safe_load(stream)
+
 INPUT_DIR = config["fastq_folder"]
 OUTPUT_DIR = config["output_folder"]
 REFERENCE_FILE = config["reference"]
@@ -62,13 +66,16 @@ def get_mem_from_threads(wildcards, threads):
 # Rule "all": Defines the final output of the pipeline
 rule all:
     input:
-        expand(f"{ALIGNED_DIR}/{{fastq_files_basename}}_{{subfolder}}.bam", fastq_files_basename=metadata_dict.keys(), subfolder={row['subfolder'] for row in metadata_dict.values()})
+        expand(f"{ALIGNED_DIR}/{{fastq_files_basename}}_{{subfolder}}.bam", 
+               zip, 
+               fastq_files_basename=metadata_dict.keys(), 
+               subfolder=[metadata_dict[key]['subfolder'] for key in metadata_dict.keys()])
 
 # Rule "bwa_map": Performs BWA alignment and SAMtools sorting
 rule bwa_map:
     input:
-        fastq_f = f"{INPUT_DIR}/{{subfolder}}/{{fastq_files_basename}}_R1_001.fastq.gz",
-        fastq_r = f"{INPUT_DIR}/{{subfolder}}/{{fastq_files_basename}}_R2_001.fastq.gz",
+        fastq_f = lambda wildcards: f"{INPUT_DIR}/{metadata_dict[wildcards.fastq_files_basename]['subfolder']}/{wildcards.fastq_files_basename}_R1_001.fastq.gz",
+        fastq_r = lambda wildcards: f"{INPUT_DIR}/{metadata_dict[wildcards.fastq_files_basename]['subfolder']}/{wildcards.fastq_files_basename}_R2_001.fastq.gz",
     output:
         bam_lane = f"{ALIGNED_DIR}/{{fastq_files_basename}}_{{subfolder}}.bam",
     params:
