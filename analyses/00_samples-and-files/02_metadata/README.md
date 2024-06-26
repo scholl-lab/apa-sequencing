@@ -1,5 +1,10 @@
 # Instructions how to generate metadata for the samples in a project
 
+# TODO tickets
+- [ ] add instructions for genomes project part
+- [ ] add instructions for exomes project part
+- [ ] make the commands into a script that works with different file naming conventions
+
 ## 1) Alignment metadata for the genomes project part
 
 # TODO: add instructions for genomes project part
@@ -10,7 +15,7 @@
 # command to list all R1 FASTQ files in a folder
 # remove _R1_001.fastq.gz from file names using sed
 # remove the download/ folder name using sed
-find download/ -type f -follow -print|xargs ls | grep "_R1_001.fastq.gz$" | sed 's/_R1_001.fastq.gz//g' | sed 's/download\///g' > fastq_files.txt
+find download/exomes -type f -follow -print|xargs ls | grep "_R1_001.fastq.gz$" | sed 's/_R1_001.fastq.gz//g' | sed 's/download\/exomes\///g' > fastq_files.txt
 
 # cat the file and pipe to:
 # split pipe input by "/" or "_" using awk and print all fields
@@ -27,7 +32,7 @@ paste fastq_files.txt fastq_parts.txt | sed 's/^.*\///g' > fastq_files_with_part
 cat fastq_files_with_parts.txt | sed 's/T\tS\t/TS\t/g' | awk -F"\t" -v OFS="\t" '{print $1, $2, $3, $4"-"$5, $6, $7}' > fastq_files_with_parts_merged.txt
 
 # add header using echo
-echo -e "fastq_files_basename\tsubfolder\tmdc_project\tproject_sample\tsample_sheet_number\tlane" | cat - fastq_files_with_parts_merged.txt > metadata.tsv
+echo -e "fastq_files_basename\tsubfolder\tmdc_project\tproject_sample\tsample_sheet_number\tlane" | cat - fastq_files_with_parts_merged.txt > metadata_exomes.tsv
 
 # remove intermediate files
 rm fastq_files.txt fastq_parts.txt fastq_files_with_parts.txt fastq_files_with_parts_merged.txt
