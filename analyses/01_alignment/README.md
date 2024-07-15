@@ -19,7 +19,7 @@
 
 ## merge all the lane bam files into one sample bam file
 ```bash
-    sbatch merge_bams.sh
+    sbatch run_merge_bams_v2.sh
 ```
 
 ## deduplicate the merged bam files
