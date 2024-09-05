@@ -36,12 +36,23 @@ individuals <- sapply(samples, function(x) extract_info(x)[1])
 single_sample_individuals <- names(which(table(individuals) == 1))
 
 # Create "Tumor only" analysis for individuals with only one sample
+#  to_analysis <- data.frame(
+#    sample1 = samples[sapply(samples, function(x) extract_info(x)[1]) %in% single_sample_individuals],
+#    sample2 = NA,
+#    bam1_file_basename = samples[sapply(samples, function(x) extract_info(x)[1]) %in% single_sample_individuals],
+#    bam2_file_basename = NA,
+#    individual1 = single_sample_individuals,
+#    individual2 = NA,
+#    analysis = "To"
+#  )
+
+# Create "Tumor only" analysis for all samples
 to_analysis <- data.frame(
-  sample1 = samples[sapply(samples, function(x) extract_info(x)[1]) %in% single_sample_individuals],
+  sample1 = samples,
   sample2 = NA,
-  bam1_file_basename = samples[sapply(samples, function(x) extract_info(x)[1]) %in% single_sample_individuals],
+  bam1_file_basename = samples,
   bam2_file_basename = NA,
-  individual1 = single_sample_individuals,
+  individual1 = sapply(samples, function(x) extract_info(x)[1]),
   individual2 = NA,
   analysis = "To"
 )
@@ -49,8 +60,5 @@ to_analysis <- data.frame(
 # Combine with the result
 final_result <- rbind(result, to_analysis)
 
-# Print final result
-print(final_result)
-
-# Optionally, write the final result to a CSV file
-write.csv(final_result, "sample_combinations_with_to.csv", row.names = FALSE)
+# Optionally, write the final result to a TSV file
+write.table(final_result, file = "calling_metadata.tsv", sep = "\t", quote = FALSE, row.names = FALSE)
