@@ -7,3 +7,6 @@
 # local testing files
 TESTING.md
 TESTING.sh
+
+# local commands file
+COMMANDS.md
