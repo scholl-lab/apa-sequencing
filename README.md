@@ -47,3 +47,19 @@ Further project documentation on [GitHub Pages](https://scholl-lab.github.io/apa
 - non-functional (NF) vs. functional APA tumors (F), these samples have genome and exome data
   1. pairwise calling of SNV/indel variants in functional vs. non-functional APA tumors (F vs. NF, NF vs. F, F vs. N, NF vs. N) to find differences in the mutational landscape especially secondary hits that cause proliferation or hormone production
   2. evolutionary analysis of functional vs. non-functional APA tumors to find the order of mutations
+
+
+## filter with variantcentrifuge
+variantcentrifuge --reference GRCh38.p14 -G testing/apa_and_cosmic_gene_list.txt -v testing/APA79/APA79-T_To.filtered.annotated.vcf.gz --log-level DEBUG --xlsx --html-report -f "((((dbNSFP_gnomAD_exomes_AC[0] <= 2 ) | (na dbNSFP_gnomAD_exomes_AC[0])) & (( dbNSFP_gnomAD_genomes_AC[0] <= 2 ) | (na dbNSFP_gnomAD_genomes_AC[0]))) | ((exists ID) & ( ID =~ 'COS' ))) & (( na FILTER ) | (FILTER = 'PASS')) & ( GEN[*].DP >= 50 ) & ( GEN[*].AF >= 0.05 ) & ( GEN[*].AF < 0.35 ) & ( VARTYPE = 'SNP' )" --preset high_or_moderate --threads 16 --append-extra-sample-fields GEN[*].DP GEN[*].AD GEN[*].AF --igv --igv-reference hg38_1kg --bam-mapping-file testing/apa_bam_mapping.txt
+
+variantcentrifuge --reference GRCh38.p14 -g all -v testing/APA79/APA79_TvsN.filtered.annotated.vcf.gz --log-level DEBUG --xlsx --html-report -f "((((dbNSFP_gnomAD_exomes_AC[0] <= 2 ) | (na dbNSFP_gnomAD_exomes_AC[0])) & (( dbNSFP_gnomAD_genomes_AC[0] <= 2 ) | (na dbNSFP_gnomAD_genomes_AC[0]))) | ((exists ID) & ( ID =~ 'COS' ))) & (( na FILTER ) | (FILTER = 'PASS')) & ( GEN[*].DP >= 50 ) & ( GEN[0].AF < 0.03 ) & ( GEN[1].AF >= 0.05 ) & ( GEN[1].AF < 0.45 ) & ( VARTYPE = 'SNP' )" --preset high_or_moderate --threads 16 --append-extra-sample-fields GEN[*].DP GEN[*].AD GEN[*].AF --igv --igv-reference hg38_1kg --bam-mapping-file testing/apa_bam_mapping.txt
+
+
+## qualimap
+qualimap bamqc --java-mem-size=8G -c -gff /data/cephfs-1/work/groups/scholl/shared/target_files/agilent/S33266340/hg38/S33266340_Regions_noheader.bed -bam results/exomes/bqsr/APA79-N.merged.dedup.bqsr.bam
+
+
+## subset BAMs
+ls results/exomes/bqsr/*.bam | parallel -j +0 "samtools view -F 1024 {} -L /fast/work/groups/ag_scholl/shared/target_files/apa_genes/hg38/apa_genes.genes2bed.GRCh38.S33266436_Regions.padding20bp.bed -bo results/exomes/samtools_view_apa_genes_padding/{/.}.apa-genes.bam"
+
+ls results/exomes/samtools_view_apa_genes_padding/*.bam | parallel -j +0 "samtools index {}"
