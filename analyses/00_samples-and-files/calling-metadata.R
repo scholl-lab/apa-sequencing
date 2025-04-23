@@ -499,11 +499,33 @@ sample_inclusion_status <- sample_info %>%
             by = c("individual")) %>%
   mutate(
     status = if_else(exclude, "exclude", "include"),
+    # Identify samples in the final metadata with To analysis
+    is_tumor_only = sample %in% (final_metadata %>% filter(analysis == "To") %>% pull(sample1)),
+    # Get list of samples that have a matching normal sample
+    has_normal_pair = map_lgl(sample, function(s) {
+      curr_ind <- str_remove(s, "-.*")
+      curr_type <- str_extract(s, "(?<=-).*")
+      
+      # Skip if this is already a normal sample
+      if (curr_type %in% normal_types) {
+        return(TRUE)
+      }
+      
+      # Check if this sample has a matching normal or appears in FvsN or NFvsN analysis
+      normal_match <- final_metadata %>% 
+        filter(
+          (individual1 == curr_ind & (analysis %in% c("TvsN", "TSvsN", "FvsN", "NFvsN")))
+        ) %>% 
+        nrow() > 0
+      
+      return(normal_match)
+    }),
     issue_details = case_when(
       individual == "APA12" & type == "T" ~ "Tumor sample swapped with APA13-T",
       individual == "APA13" & type == "T" ~ "Tumor sample swapped with APA12-T",
       individual == "APA58" ~ "Tumor and normal samples swapped",
       sample == "APA61-TS" ~ "Sample sequenced twice (APA61-T is from normal FFPE slides)",
+      is_tumor_only & !has_normal_pair ~ "Tumor-only analysis (no matching normal sample)",
       TRUE ~ reason
     )
   ) %>%
