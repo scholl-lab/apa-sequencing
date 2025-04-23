@@ -341,26 +341,51 @@ apply_corrections <- function(metadata_df) {
       }
     } 
     else {
-      # Handle pairwise analyses
+      # Handle pairwise analyses using the correct approach
+      # First, filter by individual1, then replace sample names
       
-      # Process sample1
-      if (sample1 == "iAPA6-F" || sample1 == "iAPA6-N" || sample1 == "iAPA5-NF") {
-        # These samples belong to the iAPA5 group
-        corrected_df$individual1[row_idx] <- "iAPA5"
-      }
-      else if (sample1 == "iAPA5-F" || sample1 == "iAPA5-N" || sample1 == "iAPA6-NF") {
-        # These samples belong to the iAPA6 group
-        corrected_df$individual1[row_idx] <- "iAPA6"
+      # Process rows where individual1 is iAPA5
+      if (str_detect(corrected_df$individual1[row_idx], "^iAPA5")) {
+        # For iAPA5 individual, replace sample names appropriately
+        if (sample1 == "iAPA5-F") {
+          corrected_df$sample1[row_idx] <- "iAPA6-F"
+          corrected_df$bam1_file_basename[row_idx] <- "iAPA6-F"
+        } else if (sample1 == "iAPA5-N") {
+          corrected_df$sample1[row_idx] <- "iAPA6-N"
+          corrected_df$bam1_file_basename[row_idx] <- "iAPA6-N"
+        }
+        
+        if (!is.na(sample2)) {
+          if (sample2 == "iAPA5-F") {
+            corrected_df$sample2[row_idx] <- "iAPA6-F"
+            corrected_df$bam2_file_basename[row_idx] <- "iAPA6-F"
+          } else if (sample2 == "iAPA5-N") {
+            corrected_df$sample2[row_idx] <- "iAPA6-N"
+            corrected_df$bam2_file_basename[row_idx] <- "iAPA6-N"
+          }
+        }
       }
       
-      # Process sample2
-      if (sample2 == "iAPA6-F" || sample2 == "iAPA6-N" || sample2 == "iAPA5-NF") {
-        # These samples belong to the iAPA5 group
-        corrected_df$individual2[row_idx] <- "iAPA5"
-      }
-      else if (sample2 == "iAPA5-F" || sample2 == "iAPA5-N" || sample2 == "iAPA6-NF") {
-        # These samples belong to the iAPA6 group
-        corrected_df$individual2[row_idx] <- "iAPA6"
+      # Process rows where individual1 is iAPA6
+      else if (str_detect(corrected_df$individual1[row_idx], "^iAPA6")) {
+        # For iAPA6 individual, replace sample names appropriately
+        if (sample1 == "iAPA6-F") {
+          corrected_df$sample1[row_idx] <- "iAPA5-F"
+          corrected_df$bam1_file_basename[row_idx] <- "iAPA5-F"
+        } else if (sample1 == "iAPA6-N") {
+          corrected_df$sample1[row_idx] <- "iAPA5-N"
+          corrected_df$bam1_file_basename[row_idx] <- "iAPA5-N"
+        }
+        
+        if (!is.na(sample2)) {
+          if (sample2 == "iAPA6-F") {
+            corrected_df$sample2[row_idx] <- "iAPA5-F"
+            corrected_df$bam2_file_basename[row_idx] <- "iAPA5-F"
+          } else if (sample2 == "iAPA6-N") {
+            corrected_df$sample2[row_idx] <- "iAPA5-N"
+            corrected_df$bam2_file_basename[row_idx] <- "iAPA5-N"
+          }
+        }
       }
     }
   }

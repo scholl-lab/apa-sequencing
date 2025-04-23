@@ -132,12 +132,12 @@ The script addresses several known sample identity issues:
    - **Solution**: For any analysis involving APA58 samples, the script swaps the sample IDs and BAM file basenames, and ensures all analyses are forced to "TvsN" format.
 
 3. **iAPA5/iAPA6 Complex Sample Swap**
-   - **Issue**: There's a complex swap between iAPA5 and iAPA6 samples:
+   - **Issue**: There's a complex reciprocal swap between iAPA5 and iAPA6 samples:
      - Sample group "iAPA5" should contain: iAPA6-F, iAPA6-N, iAPA5-NF
      - Sample group "iAPA6" should contain: iAPA5-F, iAPA5-N, iAPA6-NF
-   - **Solution**: The script handles these swaps differently for tumor-only ("To") and pairwise analyses:
-     - For tumor-only analyses: individual identifiers include the tissue type
-     - For pairwise analyses: samples are assigned to their correct individual groups
+   - **Solution**: The script handles these swaps by:
+     - For pairwise analyses: Reassigning individual identifiers based on which sample group they truly belong to
+     - For tumor-only analyses: Maintaining the tissue type in individual identifiers for unique output names
 
 #### Sample Exclusions
 
