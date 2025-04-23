@@ -60,6 +60,9 @@ qualimap bamqc --java-mem-size=8G -c -gff /data/cephfs-1/work/groups/scholl/shar
 
 
 ## subset BAMs
-ls results/exomes/bqsr/*.bam | parallel -j +0 "samtools view -F 1024 {} -L /fast/work/groups/ag_scholl/shared/target_files/apa_genes/hg38/apa_genes.genes2bed.GRCh38.S33266436_Regions.padding20bp.bed -bo results/exomes/samtools_view_apa_genes_padding/{/.}.apa-genes.bam"
+ls results/exomes/bqsr/*.bam | parallel -j +0 "samtools view -F 1024 {} -L /data/cephfs-1/work/groups/scholl/shared/target_files/apa_genes/hg38/apa_genes.genes2bed.GRCh38.S33266436_Regions.padding1000bp.bed -bo results/exomes/samtools_view_apa_genes_padding/{/.}.apa-genes.bam"
 
 ls results/exomes/samtools_view_apa_genes_padding/*.bam | parallel -j +0 "samtools index {}"
+
+## indexcov
+goleft indexcov --directory results/exomes/qc/indexcov results/exomes/bqsr/*.bam
