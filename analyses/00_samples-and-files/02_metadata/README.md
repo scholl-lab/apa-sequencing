@@ -78,4 +78,149 @@ rm final_bams.txt final_bams_combinations.txt sample_names_combinations.txt anal
 
 ## 4) Calling metadata for the exomes project part
 
-# TODO: add instructions for exomes project part
+The exomes project calling metadata is generated using an R script (`calling-metadata.R`) that creates all valid sample combinations for variant calling while handling several known sample issues.
+
+### Setup and Usage
+
+```bash
+# Navigate to the appropriate directory
+cd analyses/00_samples-and-files/
+
+# Run the R script to generate the calling_metadata.tsv file
+Rscript calling-metadata.R
+```
+
+### Script Details
+
+The script follows a structured approach to generate accurate calling metadata:
+
+1. **Initial Setup & Sample Status Tables**: 
+   - Defines all samples and creates sample inclusion/exclusion tables
+   - Documents reasons for excluding specific samples
+   - Generates both a detailed sample status file (`sample_inclusion_status.tsv`) and the final calling metadata
+
+2. **Generate Valid Sample Combinations**:
+   - Creates pairwise combinations for each individual (same individual, different sample types)
+   - Generates tumor-only ("To") analyses for all non-normal samples
+   - Excludes unwanted analysis combinations (e.g., Normal-vs-Tumor, Normal-vs-Normal)
+
+3. **Apply Sample-Specific Corrections**:
+   - Corrects known sample identity issues
+   - Maps sample names to the correct BAM file basenames
+
+4. **Filter Out Problematic Samples**:
+   - Excludes samples that failed quality control
+   - Handles duplicate samples
+
+5. **Output Generation**:
+   - Writes detailed sample status information to `sample_inclusion_status.tsv`
+   - Writes the final calling metadata to `calling_metadata.tsv`
+   - Provides a summary of included/excluded samples and analyses
+
+### Handling Known Sample Issues
+
+The script addresses several known sample identity issues:
+
+#### Sample Swaps
+
+1. **APA12/APA13 Tumor Swap**
+   - **Issue**: The tumor samples for patients APA12 and APA13 were swapped during processing.
+   - **Solution**: The script updates sample IDs and BAM file basenames while maintaining the original individual identifiers to ensure correct variant calling and output naming.
+
+2. **APA58 Tumor/Normal Swap**
+   - **Issue**: The tumor and normal samples for patient APA58 were swapped.
+   - **Solution**: For any analysis involving APA58 samples, the script swaps the sample IDs and BAM file basenames, and ensures all analyses are forced to "TvsN" format.
+
+3. **iAPA5/iAPA6 Complex Sample Swap**
+   - **Issue**: There's a complex swap between iAPA5 and iAPA6 samples:
+     - Sample group "iAPA5" should contain: iAPA6-F, iAPA6-N, iAPA5-NF
+     - Sample group "iAPA6" should contain: iAPA5-F, iAPA5-N, iAPA6-NF
+   - **Solution**: The script handles these swaps differently for tumor-only ("To") and pairwise analyses:
+     - For tumor-only analyses: individual identifiers include the tissue type
+     - For pairwise analyses: samples are assigned to their correct individual groups
+
+#### Sample Exclusions
+
+The following samples are excluded from analyses:
+
+1. **APA2** 
+   - **Reason**: MAPM (Micronodular adrenocortical hyperplasia with primary pigmentation) with unselective dissection
+   - **Solution**: All samples from this individual are excluded
+
+2. **APA3** 
+   - **Reason**: Other sample contamination in tumor
+   - **Solution**: All samples from this individual are excluded
+
+3. **APA32** 
+   - **Reason**: Hyperplasia - No clear tumor, micronoduli in normal tissue
+   - **Solution**: All samples from this individual are excluded
+
+4. **APA38** 
+   - **Reason**: Sample switch with unknown sample
+   - **Solution**: All samples from this individual are excluded
+
+5. **APA45** 
+   - **Reason**: Duplicate of iAPA5 (same individual)
+   - **Solution**: All APA45 samples are excluded, analyses should use iAPA5 instead
+
+6. **APA56** 
+   - **Reason**: High contamination with other sample
+   - **Solution**: All samples from this individual are excluded
+
+7. **APA69** 
+   - **Reason**: MAPM with unselective dissection
+   - **Solution**: All samples from this individual are excluded
+
+8. **APA61-TS**
+   - **Reason**: Sample sequenced twice (APA61-T is from normal FFPE slides and APA61-TS is from scooped FFPE block)
+   - **Solution**: Only APA61-TS is excluded; APA61-T is kept for analyses
+
+#### Special Handling for Functional and Non-Functional Samples
+
+For samples with Functional (F) and Non-Functional (NF) tissue types:
+
+- **Issue**: In tumor-only ("To") analyses, multiple samples from the same individual (e.g., iAPA1-F and iAPA1-NF) would generate identical output basenames in the Snakemake pipeline (e.g., "iAPA1_To").
+  
+- **Solution**: For F and NF samples, the individual identifier includes the tissue type in tumor-only analyses:
+  - Example: For sample "iAPA1-F", the individual identifier becomes "iAPA1-F" instead of just "iAPA1"
+  - Example: For sample "iAPA1-NF", the individual identifier becomes "iAPA1-NF" instead of just "iAPA1"
+
+- **Benefit**: This ensures unique output filenames in the Snakemake pipeline and prevents files from being overwritten.
+
+#### Excluded Analysis Types
+
+The following analysis types are excluded from the metadata:
+
+1. **Normal-vs-Normal** ("NvsN"): Comparing identical tissue types from the same individual would yield no meaningful somatic variants.
+2. **Normal-vs-Functional** ("NvsF"): Not relevant for the current analysis objectives.
+3. **Normal-vs-Non-Functional** ("NvsNF"): Not relevant for the current analysis objectives.
+4. **Functional-vs-Functional** ("FvsF"): Comparing identical tissue types would yield no meaningful variants.
+5. **Non-Functional-vs-Non-Functional** ("NFvsNF"): Comparing identical tissue types would yield no meaningful variants.
+6. **Normal-vs-Tumor** ("NvsT"): While standard tumor/normal comparisons are valid, for this specific project we focus on tumor-only analyses after extensive quality control.
+7. **Normal-vs-Tumor-Secondary** ("NvsTS"): Similar to Normal-vs-Tumor, excluded to maintain focus on tumor-only analyses for this project.
+
+### Sample Type Legend
+
+The samples follow a naming convention of `{individual}-{type}` where type can be:
+- **N**: Normal tissue
+- **T**: Primary tumor
+- **TS**: Secondary tumor
+- **F**: Functional tissue
+- **NF**: Non-functional tissue
+
+### Output Files
+
+The script generates two TSV files:
+
+1. **sample_inclusion_status.tsv**: A comprehensive table containing:
+   - Sample ID
+   - Individual ID
+   - Sample type
+   - Inclusion/exclusion status
+   - Detailed reason for exclusion or issue details
+
+2. **calling_metadata.tsv**: The final metadata file for variant calling containing:
+   - sample1, sample2: The sample identifiers
+   - bam1_file_basename, bam2_file_basename: The actual BAM filenames to use (may differ from sample names due to corrections)
+   - individual1, individual2: The individual identifiers
+   - analysis: The type of analysis (e.g., "TvsF", "To")
